@@ -1,0 +1,38 @@
+on:
+  [pull_request]
+
+name: Run PHPCBF on Magento 2 repository
+
+jobs:
+  build:
+    name: Run PHPCBF on Magento 2 repository
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Get File Changes
+      uses: trilom/file-changes-action@v1.2.4
+      id: file_changes
+      with:
+        output: ' '
+        githubToken: ${{ secrets.GH_TOKEN }}
+    - name: Filter file changes
+      id: file_filter
+      uses: ashley-taylor/regex-property-action@1.2
+      with:
+        value: ${{steps.file_changes.outputs.files}}
+        regex: '([^\s]+\.(?!\w*(php|phtml))(\w+))'
+        replacement: ""
+    - name: Run PHPCBF on Magento 2 repository
+      id: phpcbf
+      uses: ./
+      with:
+          arguments: ${{ steps.file_filter.outputs.value }}
+          php_version: '7.2'
+    - name: Print phpcbf output
+      shell: bash
+      run: |
+        PHPCBF_OUTPUT="${{ steps.phpcbf.outputs.phpcbf_output }}"
+        PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%25'/'%'}"
+        PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'%0A'/'\n'}"
+        PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'%0D'/'\r'}"
+        echo -e $PHPCBF_OUTPUT

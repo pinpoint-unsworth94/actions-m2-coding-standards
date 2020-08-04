@@ -1,0 +1,23 @@
+name: 'PHPCBF M2 Github Action'
+description: 'runs PHPCBF against M2 code'
+author: 'Ben Unsworth'
+branding:
+    icon: 'zap'
+    color: 'green'
+inputs:
+    arguments:
+        description: 'Arguments to add to PHPCBF CLI'
+        required: true
+    php_version:
+        description: 'PHP version to use when installing Magento.'
+        default: '7.2'
+        required: false
+outputs:
+    issue:
+      phpcbf_output: Table of changes
+runs:
+    using: 'docker'
+    image: 'Dockerfile'
+    args:
+        - ${{ inputs.arguments }}
+        - ${{ inputs.php_version }}
