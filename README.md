@@ -8,7 +8,7 @@ Example usage:
   uses: pinpoint-unsworth94/actions-phpcbf-m2@master
   with:
       arguments: ${{ steps.file_filter.outputs.value }}
-      php_version: '7.2' #default: 7.2
+      php_version: '7.2' #default: 7.2 (7.1, 7.2, 7.3 supported)
 - name: Print phpcbf output
   shell: bash
   run: |
