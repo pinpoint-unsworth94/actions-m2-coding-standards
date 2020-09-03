@@ -13,8 +13,8 @@ inputs:
         default: '7.2'
         required: false
 outputs:
-    issue:
-      phpcbf_output: Table of changes
+    phpcbf_output:
+        description: Table of changes
 runs:
     using: 'docker'
     image: 'Dockerfile'
