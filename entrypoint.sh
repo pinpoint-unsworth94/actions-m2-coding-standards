@@ -22,7 +22,7 @@ php -r "unlink('composer-setup.php');"
 
 echo "Running composer install..."
 php -d memory_limit=-1 composer.phar global require hirak/prestissimo
-php -d memory_limit=-1 composer.phar install
+php -d memory_limit=-1 composer.phar install --quiet
 
 echo "Setting up Magento2 PHPCBF standards..."
 ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
@@ -35,6 +35,6 @@ PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
 
-echo "hello....."
-echo "$PHPCBF_OUTPUT"
-echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
+git add ${ARGUMENTS}
+git commit -m "Autofix PHPCBF Code Fixes."
+git push
