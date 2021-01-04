@@ -39,12 +39,19 @@ echo "Setting up Magento2 PHPCBF standards..."
 ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
 
 echo "## Running PHPCBF with arguments «${ARGUMENTS}»"
-
 PHPCBF_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
+PHPCBF_FIXED_CHECK=$(echo $PHPCS_OUTPUT | grep "No fixable errors were found")
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
+
+if [ "$PHPCBF_FIXED_CHECK" = "No fixable errors were found" ]
+then
+  echo "::set-output name=phpcbf_fixed_anything::false"
+else
+  echo "::set-output name=phpcbf_fixed_anything::true"
+fi
 
 echo "## Running PHPCS with arguments «${ARGUMENTS}»"
 PHPCS_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcs --standard=Magento2 ${ARGUMENTS})
