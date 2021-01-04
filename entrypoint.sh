@@ -1,7 +1,17 @@
 #!/bin/bash
 # set -e
 
-update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
+JENKINS_FILE=$(ls -1 _build/jenkins/ | head -1)
+JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{print $2}' | grep '[0-9]' | head -1)
+
+echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
+
+if [ -z "$JENKINS_PHP" ]
+then
+  update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
+else
+  update-alternatives --set php /usr/bin/php${JENKINS_PHP}
+fi
 
 PHP_FULL_VERSION=$(php -r 'echo phpversion();')
 
