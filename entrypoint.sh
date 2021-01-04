@@ -29,7 +29,7 @@ php -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
 
 echo "Running composer install..."
 php -d memory_limit=-1 composer.phar global require hirak/prestissimo
-php -d memory_limit=-1 composer.phar install
+php -d memory_limit=-1 composer.phar install --quiet
 
 ##tempory fix to stop https://github.com/magento/magento2/issues/28961
 echo "Removing magento/magento2-functional-testing-framework for bugfix - not needed anyway..."
