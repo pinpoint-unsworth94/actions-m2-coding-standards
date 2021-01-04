@@ -64,14 +64,14 @@ PHPCS_WARNING_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(AND|WARNINGS)" '{print $2
 
 if [ "$PHPCS_ERROR_COUNT" = "0" ]
 then
-  echo "::set-output name=has_errors::false"
+  echo "::set-output name=phpcs_has_errors::false"
 else
-  echo "::set-output name=has_errors::true"
+  echo "::set-output name=phpcs_has_errors::true"
 fi
 
 if [ "$PHPCS_WARNING_COUNT" = "0" ]
 then
-  echo "::set-output name=has_warnings::false"
+  echo "::set-output name=phpcs_has_warnings::false"
 else
-  echo "::set-output name=has_warnings::true"
+  echo "::set-output name=phpcs_has_warnings::true"
 fi
