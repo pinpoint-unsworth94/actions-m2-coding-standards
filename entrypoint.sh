@@ -31,6 +31,9 @@ echo "Running composer install..."
 php -d memory_limit=-1 composer.phar global require hirak/prestissimo
 php -d memory_limit=-1 composer.phar install
 
+##tempory fix to stop https://github.com/magento/magento2/issues/28961
+composer remove magento/magento2-functional-testing-framework
+
 echo "Setting up Magento2 PHPCBF standards..."
 ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
 
