@@ -41,9 +41,30 @@ echo "Setting up Magento2 PHPCBF standards..."
 echo "## Running PHPCBF with arguments «${ARGUMENTS}»"
 
 PHPCBF_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
-
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
-
 echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
+
+echo "## Running PHPCS with arguments «${ARGUMENTS}»"
+PHPCS_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcs --standard=Magento2 ${ARGUMENTS})
+PHPCS_OUTPUT="${PHPCS_OUTPUT//'%'/'%25'}"
+PHPCS_OUTPUT="${PHPCS_OUTPUT//$'\n'/'%0A'}"
+PHPCS_OUTPUT="${PHPCS_OUTPUT//$'\r'/'%0D'}"
+echo "::set-output name=phpcs_output::$PHPCS_OUTPUT"
+PHPCS_ERROR_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(FOUND|ERRORS)" '{print $2}' | grep '[0-9]' | sed 's/ //g')
+PHPCS_WARNING_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(AND|WARNINGS)" '{print $2}' | grep '[0-9]' | sed 's/ //g')
+
+if [ "$PHPCS_ERROR_COUNT" = "0" ]
+then
+  echo "::set-output name=has_errors::false"
+else
+  echo "::set-output name=has_errors::true"
+fi
+
+if [ "$PHPCS_WARNING_COUNT" = "0" ]
+then
+  echo "::set-output name=has_warnings::false"
+else
+  echo "::set-output name=has_warnings::true"
+fi
