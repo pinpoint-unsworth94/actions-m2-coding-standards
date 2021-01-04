@@ -49,7 +49,7 @@ echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
 echo "echoing out fixed check value"
 echo $PHPCBF_FIXED_CHECK
 
-if [ "$PHPCBF_FIXED_CHECK" == *"No fixable errors were found"* ]
+if [[ "$PHPCBF_FIXED_CHECK" == *"No fixable errors were found"* ]]
 then
   echo "::set-output name=phpcbf_fixed_anything::false"
 else
@@ -65,14 +65,14 @@ echo "::set-output name=phpcs_output::$PHPCS_OUTPUT"
 PHPCS_ERROR_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(FOUND|ERRORS)" '{print $2}' | grep '[0-9]' | sed 's/ //g')
 PHPCS_WARNING_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(AND|WARNINGS)" '{print $2}' | grep '[0-9]' | sed 's/ //g')
 
-if [ "$PHPCS_ERROR_COUNT" = "0" ]
+if [[ "$PHPCS_ERROR_COUNT" = "0" ]]
 then
   echo "::set-output name=phpcs_has_errors::false"
 else
   echo "::set-output name=phpcs_has_errors::true"
 fi
 
-if [ "$PHPCS_WARNING_COUNT" = "0" ]
+if [[ "$PHPCS_WARNING_COUNT" = "0" ]]
 then
   echo "::set-output name=phpcs_has_warnings::false"
 else
