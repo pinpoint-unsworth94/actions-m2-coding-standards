@@ -49,7 +49,7 @@ echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
 echo "echoing out fixed check value"
 echo $PHPCBF_FIXED_CHECK
 
-if [ "$PHPCBF_FIXED_CHECK" == "No fixable errors were found" ]
+if [ "$PHPCBF_FIXED_CHECK" == "No fixable errors were found"* ]
 then
   echo "::set-output name=phpcbf_fixed_anything::false"
 else
