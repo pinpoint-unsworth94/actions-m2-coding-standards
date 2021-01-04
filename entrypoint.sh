@@ -40,11 +40,11 @@ echo "Setting up Magento2 PHPCBF standards..."
 
 echo "## Running PHPCBF with arguments «${ARGUMENTS}»"
 PHPCBF_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
+PHPCBF_FIXED_CHECK=$(echo $PHPCBF_OUTPUT | grep "No fixable errors were found")
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
-PHPCBF_FIXED_CHECK=$(echo $PHPCBF_OUTPUT | grep "No fixable errors were found")
 
 echo "echoing out fixed check value"
 echo $PHPCBF_FIXED_CHECK
