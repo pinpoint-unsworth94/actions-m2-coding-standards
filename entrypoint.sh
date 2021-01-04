@@ -46,9 +46,6 @@ PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
 
-echo "echoing out fixed check value"
-echo $PHPCBF_FIXED_CHECK
-
 if [[ "$PHPCBF_FIXED_CHECK" == *"No fixable errors were found"* ]]
 then
   echo "::set-output name=phpcbf_fixed_anything::false"
