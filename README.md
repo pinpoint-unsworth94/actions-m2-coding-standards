@@ -3,7 +3,7 @@ Github action to run PHPCBF and PHPCS on pull request changes using Magento2 sta
 
 Example usage:
 ```yml
-- name: Run PHPCBF on Magento 2 repository
+- name: Run PHPCBF & PHPCS on Magento 2 repository
   id: phpcbf
   uses: pinpoint-unsworth94/actions-m2-coding-standards@master
   with:
