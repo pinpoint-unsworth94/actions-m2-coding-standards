@@ -1,5 +1,5 @@
-name: 'PHPCBF M2 Github Action'
-description: 'runs PHPCBF against M2 code'
+name: 'PHPCBF/PHPCS M2 Github Action'
+description: 'Runs PHPCBF/PHPCS against M2 code'
 author: 'Ben Unsworth'
 branding:
     icon: 'zap'
@@ -15,6 +15,14 @@ inputs:
 outputs:
     phpcbf_output:
         description: Table of changes
+    phpcbf_fixed_anything:
+        description: Flag of any changes made or not
+    phpcs_output:
+        description: Table of Changes
+    phpcs_has_errors:
+        description: flag of any errors from phpcs
+    phpcs_has_warnings:
+        description: flag of any warnings from phpcs
 runs:
     using: 'docker'
     image: 'Dockerfile'

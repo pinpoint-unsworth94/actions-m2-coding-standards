@@ -1,5 +1,5 @@
-# actions-phpcbf-m2
-Github action to run PHPCBF on pull request changes using Magento2 standards and commit changes to pull request.
+# actions-m2-coding-standards
+Github action to run PHPCBF and PHPCS on pull request changes using Magento2 standards and commit changes to pull request.
 
 Example usage:
 ```yml
@@ -18,7 +18,3 @@ Example usage:
     PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'%0D'/'\r'}"
     echo -e $PHPCBF_OUTPUT
 ```
-
-## TODO:
-
- - [ ] Commit changes to PR inside upon files being changed.
