@@ -24,6 +24,13 @@ fi
 
 echo "PHP Version : ${PHP_FULL_VERSION}"
 
+echo "Finding magento root path..."
+BIN_MAGENTO_PATH=$(find . -name 'magento' | grep -m1 'bin/magento')
+MAGENTO_ROOT_PATH="$(dirname $BIN_MAGENTO_PATH)/../"
+
+echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
+cd $MAGENTO_ROOT_PATH
+
 echo "Installing composer..."
 php -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
 
@@ -62,14 +69,14 @@ echo "::set-output name=phpcs_output::$PHPCS_OUTPUT"
 PHPCS_ERROR_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(FOUND|ERRORS)" '{print $2}' | grep '[0-9]' | sed 's/ //g')
 PHPCS_WARNING_COUNT=$(echo $PHPCS_OUTPUT | awk -v FS="(AND|WARNINGS)" '{print $2}' | grep '[0-9]' | sed 's/ //g')
 
-if [[ "$PHPCS_ERROR_COUNT" = "0" ]]
+if [[ "$PHPCS_ERROR_COUNT" == "0" ]]
 then
   echo "::set-output name=phpcs_has_errors::false"
 else
   echo "::set-output name=phpcs_has_errors::true"
 fi
 
-if [[ "$PHPCS_WARNING_COUNT" = "0" ]]
+if [[ "$PHPCS_WARNING_COUNT" == "0" ]]
 then
   echo "::set-output name=phpcs_has_warnings::false"
 else
