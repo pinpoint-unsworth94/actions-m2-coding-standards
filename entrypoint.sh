@@ -25,7 +25,7 @@ fi
 echo "PHP Version : ${PHP_FULL_VERSION}"
 
 echo "Finding magento root path..."
-BIN_MAGENTO_PATH=$(find . -name 'magento' | grep -m1 'bin/magento')
+BIN_MAGENTO_PATH=$(find . -name 'magento' -maxdepth 3 | grep -m1 'bin/magento')
 MAGENTO_ROOT_PATH="$(dirname $BIN_MAGENTO_PATH)/../"
 
 echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
