@@ -5,7 +5,7 @@ Example usage:
 ```yml
 - name: Run PHPCBF on Magento 2 repository
   id: phpcbf
-  uses: pinpoint-unsworth94/actions-phpcbf-m2@master
+  uses: pinpoint-unsworth94/actions-m2-coding-standards@master
   with:
       arguments: ${{ steps.file_filter.outputs.value }}
       php_version: '7.2' #default: 7.2 (7.1, 7.2, 7.3 supported)
