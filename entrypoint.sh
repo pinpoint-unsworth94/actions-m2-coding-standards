@@ -16,7 +16,7 @@ fi
 ARGUMENTS="${INPUT_ARGUMENTS}"
 if [[ $INPUT_FULL_SCAN == 'false' ]]
 then
-  echo "Removing none org namespace changes..."
+  echo "Removing none org namespace (${INPUT_ORG_NAMESPACE}) changes..."
   ARGUMENTS=$(echo $ARGUMENTS | sed 's/[\ ]/\n/g' | sed "/\/code\/${INPUT_ORG_NAMESPACE}\//!s/.*/ /" | tr '\n' ' ')
 fi
 
