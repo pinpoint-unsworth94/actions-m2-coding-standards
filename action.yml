@@ -12,7 +12,7 @@ inputs:
         description: 'PHP version to use when installing Magento.'
         default: '7.2'
         required: false
-    org_namepace:
+    org_namespace:
         description: 'org module namespace app/code/{org_namepace}/'
         required: true
     full_scan:
