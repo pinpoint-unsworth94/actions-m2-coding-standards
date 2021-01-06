@@ -16,6 +16,11 @@ fi
 PHP_FULL_VERSION=$(php -r 'echo phpversion();')
 
 ARGUMENTS="${INPUT_ARGUMENTS}"
+if [[ $INPUT_FULL_SCAN == 'false' ]]
+then
+  echo "Removing none org namespace changes..."
+  ARGUMENTS=$(echo $ARGUMENTS | sed 's/[\ ]/\n/g' | sed '/\/code\/Pinpoint\//!s/.*/ /' | tr '\n' ' ')
+fi
 
 if [ -z "$(ls)" ]; then
   echo "No code have been found.  Did you checkout with «actions/checkout» ?"
