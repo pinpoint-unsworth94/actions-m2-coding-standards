@@ -12,6 +12,9 @@ inputs:
         description: 'PHP version to use when installing Magento.'
         default: '7.2'
         required: false
+    org_namepace:
+        description: 'org module namespace app/code/{org_namepace}/'
+        required: true
     full_scan:
         description: 'If set to true, phpcbf and phpcs will be ran against all PHP files in the PR. If false, this will only run against Org namepsace in app/code'
         default: 'false'

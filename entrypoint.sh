@@ -13,13 +13,11 @@ else
   update-alternatives --set php /usr/bin/php${JENKINS_PHP}
 fi
 
-PHP_FULL_VERSION=$(php -r 'echo phpversion();')
-
 ARGUMENTS="${INPUT_ARGUMENTS}"
 if [[ $INPUT_FULL_SCAN == 'false' ]]
 then
   echo "Removing none org namespace changes..."
-  ARGUMENTS=$(echo $ARGUMENTS | sed 's/[\ ]/\n/g' | sed '/\/code\/Pinpoint\//!s/.*/ /' | tr '\n' ' ')
+  ARGUMENTS=$(echo $ARGUMENTS | sed 's/[\ ]/\n/g' | sed "/\/code\/${INPUT_ORG_NAMESPACE}\//!s/.*/ /" | tr '\n' ' ')
 fi
 
 if [ -z "$(ls)" ]; then
@@ -27,6 +25,7 @@ if [ -z "$(ls)" ]; then
   exit 1
 fi
 
+PHP_FULL_VERSION=$(php -r 'echo phpversion();')
 echo "PHP Version : ${PHP_FULL_VERSION}"
 
 echo "Finding magento root path..."
