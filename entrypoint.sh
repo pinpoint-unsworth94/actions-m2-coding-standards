@@ -40,6 +40,14 @@ php -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
 
 echo "Running composer install..."
 php -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+
+HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
+if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
+then
+  echo "No repo.magento.com creds found in auth.json."
+  php -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
+fi
+
 php -d memory_limit=-1 composer.phar install --quiet
 
 ##tempory fix to stop https://github.com/magento/magento2/issues/28961

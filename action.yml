@@ -19,6 +19,12 @@ inputs:
         description: 'If set to true, phpcbf and phpcs will be ran against all PHP files in the PR. If false, this will only run against Org namepsace in app/code'
         default: 'false'
         required: false
+    magento_composer_username:
+        description: 'composer username for magento'
+        required: true
+    magento_composer_password:
+        description: 'composer password for magento'
+        required: true
 outputs:
     phpcbf_output:
         description: Table of changes
