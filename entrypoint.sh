@@ -48,10 +48,10 @@ then
   php -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-php -d memory_limit=-1 composer.phar install
+php -d memory_limit=-1 composer.phar install --quiet
 
 ##tempory fix to stop https://github.com/magento/magento2/issues/28961
-echo "Removing magento/magento2-functional-testing-framework for bugfix - not needed anyway..."
+echo "Patching Magento/FunctionalTestingFramework/_bootstrap.php incase xdebug_disable doesnt exist..."
 # php -d memory_limit=-1 composer.phar remove magento/magento2-functional-testing-framework --quiet
 sed -i 's/xdebug_disable();/if (function_exists("xdebug_disable")) xdebug_disable();/g' vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php
 
