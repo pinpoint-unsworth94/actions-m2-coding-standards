@@ -13,7 +13,7 @@ else
   update-alternatives --set php /usr/bin/php${JENKINS_PHP}
 fi
 
-ARGUMENTS="${INPUT_ARGUMENTS}"
+ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g') #change paths from m2/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
 then
   echo "Removing none org namespace (${INPUT_ORG_NAMESPACE}) changes..."
