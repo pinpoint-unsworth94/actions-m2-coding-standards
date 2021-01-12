@@ -50,6 +50,13 @@ fi
 
 php -d memory_limit=-1 composer.phar install --quiet
 
+HAS_CODING_STANDARDS_INSTALLED=$(grep "magento/magento-coding-standard" ./composer.json)
+if [[ -z $HAS_CODING_STANDARDS_INSTALLED ]]
+then
+  echo "Magento coding standards package not installed. Installing magento/magento-coding-standard..."
+  php -d memory_limit=-1 composer.phar require magento/magento-coding-standard:* --quiet
+fi
+
 ##tempory fix to stop https://github.com/magento/magento2/issues/28961
 echo "Patching Magento/FunctionalTestingFramework/_bootstrap.php incase xdebug_disable doesnt exist..."
 # php -d memory_limit=-1 composer.phar remove magento/magento2-functional-testing-framework --quiet
