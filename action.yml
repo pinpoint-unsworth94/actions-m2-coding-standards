@@ -36,6 +36,8 @@ outputs:
         description: flag of any errors from phpcs
     phpcs_has_warnings:
         description: flag of any warnings from phpcs
+    files_checked:
+        description: files phpcbf and phpcs have been ran against
 runs:
     using: 'docker'
     image: 'Dockerfile'

@@ -13,7 +13,7 @@ else
   update-alternatives --set php /usr/bin/php${JENKINS_PHP}
 fi
 
-ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g') #change paths from m2/app... to app...
+ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
 then
   echo "Removing none org namespace (${INPUT_ORG_NAMESPACE}) changes..."
@@ -72,6 +72,8 @@ PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
+
+echo "::set-output name=files_checked::$ARGUMENTS"
 
 if [[ "$PHPCBF_FIXED_CHECK" == *"No fixable errors were found"* ]]
 then
