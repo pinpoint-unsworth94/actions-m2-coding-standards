@@ -48,14 +48,17 @@ then
   php -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-php -d memory_limit=-1 composer.phar install --quiet
+# php -d memory_limit=-1 composer.phar install --quiet
+echo "Temporarily killing composer as not needed..."
+mv composer.json composer.json.bk
+mv composer.lock composer.lock.bk
 
-HAS_CODING_STANDARDS_INSTALLED=$(grep "magento/magento-coding-standard" ./composer.json)
-if [[ -z $HAS_CODING_STANDARDS_INSTALLED ]]
-then
+# HAS_CODING_STANDARDS_INSTALLED=$(grep "magento/magento-coding-standard" ./composer.json)
+# if [[ -z $HAS_CODING_STANDARDS_INSTALLED ]]
+# then
   echo "Magento coding standards package not installed. Installing magento/magento-coding-standard..."
   php -d memory_limit=-1 composer.phar require magento/magento-coding-standard:* --quiet --ignore-platform-reqs
-fi
+# fi
 
 ##tempory fix to stop https://github.com/magento/magento2/issues/28961
 echo "Patching Magento/FunctionalTestingFramework/_bootstrap.php incase xdebug_disable doesnt exist..."
@@ -104,3 +107,7 @@ then
 else
   echo "::set-output name=phpcs_has_warnings::true"
 fi
+
+echo "Reverting the killing of composer as not needed..."
+mv composer.json.bk composer.json
+mv composer.lock.bk composer.lock
