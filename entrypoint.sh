@@ -76,7 +76,8 @@ PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=phpcbf_output::$PHPCBF_OUTPUT"
 
-echo "::set-output name=files_checked::$ARGUMENTS"
+FILE_CHECKED=$(echo ${INPUT_ARGUMENTS} | sed 's/  */ /g')
+echo "::set-output name=files_checked::$FILE_CHECKED"
 
 if [[ "$PHPCBF_FIXED_CHECK" == *"No fixable errors were found"* ]]
 then
