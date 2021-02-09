@@ -6,12 +6,12 @@ JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{pri
 
 echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
-if [ -z "$JENKINS_PHP" ]
-then
-  update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
-else
-  update-alternatives --set php /usr/bin/php${JENKINS_PHP}
-fi
+# if [ -z "$JENKINS_PHP" ]
+# then
+#   update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
+# else
+#   update-alternatives --set php /usr/bin/php${JENKINS_PHP}
+# fi
 
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
@@ -25,7 +25,7 @@ if [ -z "$(ls)" ]; then
   exit 1
 fi
 
-PHP_FULL_VERSION=$(php -r 'echo phpversion();')
+PHP_FULL_VERSION=$(sh -c "php-${JENKINS_PHP} -r 'echo phpversion();'")
 echo "PHP Version : ${PHP_FULL_VERSION}"
 
 echo "Finding magento root path..."
@@ -69,7 +69,7 @@ echo "Setting up Magento2 PHPCBF standards..."
 ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
 
 echo "## Running PHPCBF with arguments «${ARGUMENTS}»"
-PHPCBF_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
+PHPCBF_OUTPUT=$(sh -c "php-${PHP_FULL_VERSION} -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS}")
 PHPCBF_FIXED_CHECK=$(echo $PHPCBF_OUTPUT | grep "No fixable errors were found")
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
