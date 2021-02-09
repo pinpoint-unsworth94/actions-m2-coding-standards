@@ -8,9 +8,9 @@ echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
 if [ -z "$JENKINS_PHP" ]
 then
-  update-alternatives --set php /phpfarm/inst/bin/php-${INPUT_PHP_VERSION}
+  alias php="/phpfarm/inst/bin/php-${INPUT_PHP_VERSION}"
 else
-  update-alternatives --set php /phpfarm/inst/bin/php-${JENKINS_PHP}
+  alias php="/phpfarm/inst/bin/php-${JENKINS_PHP}"
 fi
 
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
