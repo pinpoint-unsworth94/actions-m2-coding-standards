@@ -8,9 +8,9 @@ echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
 if [ -z "$JENKINS_PHP" ]
 then
-  update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
+  PHP_BIN="/phpfarm/inst/bin/php-${INPUT_PHP_VERSION}"
 else
-  update-alternatives --set php /usr/bin/php${JENKINS_PHP}
+  PHP_BIN="/phpfarm/inst/bin/php-${JENKINS_PHP}"
 fi
 
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
@@ -25,7 +25,7 @@ if [ -z "$(ls)" ]; then
   exit 1
 fi
 
-PHP_FULL_VERSION=$(php -r 'echo phpversion();')
+PHP_FULL_VERSION=$($PHP_BIN -r 'echo phpversion();')
 echo "PHP Version : ${PHP_FULL_VERSION}"
 
 echo "Finding magento root path..."
@@ -36,40 +36,30 @@ echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
 cd $MAGENTO_ROOT_PATH
 
 echo "Installing composer..."
-php -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
-
-echo "Running composer install..."
-php -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+$PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
 
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
 then
   echo "No repo.magento.com creds found in auth.json."
-  php -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
+  $PHP_BIN -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-# php -d memory_limit=-1 composer.phar install --quiet
 echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
-# HAS_CODING_STANDARDS_INSTALLED=$(grep "magento/magento-coding-standard" ./composer.json)
-# if [[ -z $HAS_CODING_STANDARDS_INSTALLED ]]
-# then
-  echo "Magento coding standards package not installed. Installing magento/magento-coding-standard..."
-  php -d memory_limit=-1 composer.phar require magento/magento-coding-standard:* --quiet --ignore-platform-reqs
-# fi
+echo "Installing hirak/prestissimo..."
+$PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
 
-##tempory fix to stop https://github.com/magento/magento2/issues/28961
-echo "Patching Magento/FunctionalTestingFramework/_bootstrap.php incase xdebug_disable doesnt exist..."
-# php -d memory_limit=-1 composer.phar remove magento/magento2-functional-testing-framework --quiet
-sed -i 's/xdebug_disable();/if (function_exists("xdebug_disable")) xdebug_disable();/g' vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php
+echo "Magento coding standards package not installed. Installing magento/magento-coding-standard..."
+$PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard:* --quiet --ignore-platform-reqs
 
 echo "Setting up Magento2 PHPCBF standards..."
-./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
+$PHP_BIN ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
 
 echo "## Running PHPCBF with arguments «${ARGUMENTS}»"
-PHPCBF_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
+PHPCBF_OUTPUT=$($PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
 PHPCBF_FIXED_CHECK=$(echo $PHPCBF_OUTPUT | grep "No fixable errors were found")
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
@@ -87,7 +77,7 @@ else
 fi
 
 echo "## Running PHPCS with arguments «${ARGUMENTS}»"
-PHPCS_OUTPUT=$(php -d memory_limit=-1 ./vendor/bin/phpcs --standard=Magento2 ${ARGUMENTS})
+PHPCS_OUTPUT=$($PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --standard=Magento2 ${ARGUMENTS})
 PHPCS_OUTPUT="${PHPCS_OUTPUT//'%'/'%25'}"
 PHPCS_OUTPUT="${PHPCS_OUTPUT//$'\n'/'%0A'}"
 PHPCS_OUTPUT="${PHPCS_OUTPUT//$'\r'/'%0D'}"
@@ -108,6 +98,11 @@ then
 else
   echo "::set-output name=phpcs_has_warnings::true"
 fi
+
+#annotatate files in PR
+cp /problem-matcher.json .
+echo "::add-matcher::$(pwd)/problem-matcher.json"
+$PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=Magento2 ${ARGUMENTS}
 
 echo "Reverting the killing of composer as not needed..."
 mv composer.json.bk composer.json
