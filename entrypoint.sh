@@ -6,7 +6,7 @@ JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{pri
 
 echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
-ls -l /usr/bin/
+whereis php-7.2
 
 if [ -z "$JENKINS_PHP" ]
 then
