@@ -8,13 +8,10 @@ echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
 if [ -z "$JENKINS_PHP" ]
 then
-  alias php="/phpfarm/inst/bin/php-${INPUT_PHP_VERSION}"
+  PHP_BIN="/phpfarm/inst/bin/php-${INPUT_PHP_VERSION}"
 else
-  alias php="/phpfarm/inst/bin/php-${JENKINS_PHP}"
+  PHP_BIN="/phpfarm/inst/bin/php-${JENKINS_PHP}"
 fi
-
-
-sh -c "alias php='/phpfarm/inst/bin/php-${JENKINS_PHP}'"
 
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
@@ -28,7 +25,7 @@ if [ -z "$(ls)" ]; then
   exit 1
 fi
 
-PHP_FULL_VERSION=$(php -r 'echo phpversion();')
+PHP_FULL_VERSION=$($PHP_BIN -r 'echo phpversion();')
 echo "PHP Version : ${PHP_FULL_VERSION}"
 
 echo "Finding magento root path..."
@@ -64,9 +61,9 @@ mv composer.lock composer.lock.bk
 # fi
 
 ##tempory fix to stop https://github.com/magento/magento2/issues/28961
-echo "Patching Magento/FunctionalTestingFramework/_bootstrap.php incase xdebug_disable doesnt exist..."
+# echo "Patching Magento/FunctionalTestingFramework/_bootstrap.php incase xdebug_disable doesnt exist..."
 # php -d memory_limit=-1 composer.phar remove magento/magento2-functional-testing-framework --quiet
-sed -i 's/xdebug_disable();/if (function_exists("xdebug_disable")) xdebug_disable();/g' vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php
+# sed -i 's/xdebug_disable();/if (function_exists("xdebug_disable")) xdebug_disable();/g' vendor/magento/magento2-functional-testing-framework/src/Magento/FunctionalTestingFramework/_bootstrap.php
 
 echo "Setting up Magento2 PHPCBF standards..."
 ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
