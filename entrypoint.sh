@@ -110,8 +110,8 @@ else
 fi
 
 #annotatate files in PR
-cp /problem-matcher.json ${MAGENTO_ROOT_PATH}/
-echo "::add-matcher::${MAGENTO_ROOT_PATH}/problem-matcher.json"
+cp /problem-matcher.json ${MAGENTO_ROOT_PATH}
+echo "::add-matcher::${MAGENTO_ROOT_PATH}problem-matcher.json"
 php -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=Magento2 ${ARGUMENTS}
 
 echo "Reverting the killing of composer as not needed..."
