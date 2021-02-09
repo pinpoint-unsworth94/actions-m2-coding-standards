@@ -111,7 +111,7 @@ fi
 
 #annotatate files in PR
 cp /problem-matcher.json .
-echo "::add-matcher::problem-matcher.json"
+echo "::add-matcher::$(pwd)/problem-matcher.json"
 php -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=Magento2 ${ARGUMENTS}
 
 echo "Reverting the killing of composer as not needed..."
