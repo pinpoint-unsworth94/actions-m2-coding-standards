@@ -33,5 +33,7 @@ LABEL maintainer="Ben Unsworth <ben.unsworth@pinpointdesigns.co.uk>"
 
 COPY "entrypoint.sh" "/entrypoint.sh"
 
+ADD problem-matcher.json /problem-matcher.json
+
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
