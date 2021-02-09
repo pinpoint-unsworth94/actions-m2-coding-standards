@@ -49,6 +49,9 @@ echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
+echo "Installing hirak/prestissimo..."
+$PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+
 echo "Magento coding standards package not installed. Installing magento/magento-coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard:* --quiet --ignore-platform-reqs
 
