@@ -6,12 +6,14 @@ JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{pri
 
 echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
-# if [ -z "$JENKINS_PHP" ]
-# then
-#   update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
-# else
-#   update-alternatives --set php /usr/bin/php${JENKINS_PHP}
-# fi
+ls -l /usr/bin/
+
+if [ -z "$JENKINS_PHP" ]
+then
+  update-alternatives --set php /usr/bin/php${INPUT_PHP_VERSION}
+else
+  update-alternatives --set php /usr/bin/php${JENKINS_PHP}
+fi
 
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
@@ -110,10 +112,7 @@ else
 fi
 
 #annotatate files in PR
-ls -l /
 cp /problem-matcher.json .
-echo $(pwd)
-ls -l
 echo "::add-matcher::$(pwd)/problem-matcher.json"
 php -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=Magento2 ${ARGUMENTS}
 
