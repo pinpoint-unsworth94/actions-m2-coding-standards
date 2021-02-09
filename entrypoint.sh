@@ -13,6 +13,9 @@ else
   alias php="/phpfarm/inst/bin/php-${JENKINS_PHP}"
 fi
 
+
+sh -c "/phpfarm/inst/bin/php-${JENKINS_PHP} -v"
+
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
 then
