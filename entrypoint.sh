@@ -58,8 +58,12 @@ $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standar
 echo "Setting up Magento2 PHPCBF standards..."
 $PHP_BIN ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
 
+echo "Moving in custom phpcs rulesets..."
+cp /phpcs.xml .
+cp -R /Sniffs/Custom ./vendor/magento/magento-coding-standard/Magento2/Sniffs/
+
 echo "## Running PHPCBF with arguments «${ARGUMENTS}»"
-PHPCBF_OUTPUT=$($PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcbf --standard=Magento2 ${ARGUMENTS})
+PHPCBF_OUTPUT=$($PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcbf --standard=phpcs.xml ${ARGUMENTS})
 PHPCBF_FIXED_CHECK=$(echo $PHPCBF_OUTPUT | grep "No fixable errors were found")
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//'%'/'%25'}"
 PHPCBF_OUTPUT="${PHPCBF_OUTPUT//$'\n'/'%0A'}"
@@ -77,7 +81,7 @@ else
 fi
 
 echo "## Running PHPCS with arguments «${ARGUMENTS}»"
-PHPCS_OUTPUT=$($PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --standard=Magento2 ${ARGUMENTS})
+PHPCS_OUTPUT=$($PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --standard=phpcs.xml ${ARGUMENTS})
 PHPCS_OUTPUT="${PHPCS_OUTPUT//'%'/'%25'}"
 PHPCS_OUTPUT="${PHPCS_OUTPUT//$'\n'/'%0A'}"
 PHPCS_OUTPUT="${PHPCS_OUTPUT//$'\r'/'%0D'}"
@@ -102,7 +106,7 @@ fi
 #annotatate files in PR
 cp /problem-matcher.json .
 echo "::add-matcher::$(pwd)/problem-matcher.json"
-$PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=Magento2 ${ARGUMENTS}
+$PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=phpcs.xml ${ARGUMENTS}
 
 echo "Reverting the killing of composer as not needed..."
 mv composer.json.bk composer.json
