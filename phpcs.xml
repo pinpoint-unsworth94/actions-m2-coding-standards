@@ -11,4 +11,9 @@
     <rule ref="Squiz.Commenting.FunctionComment" />
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />
     <rule ref="Squiz.Commenting.VariableComment" />
+
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
+    <rule ref="SlevomatCodingStandard.Functions.UnusedParameter" />
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses" />
+    <rule ref="SlevomatCodingStandard.Variables.UnusedVariable" />
 </ruleset>
