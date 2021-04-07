@@ -1,0 +1,13 @@
+*
+!/Sniffs
+!/Sniffs/Custom
+!/Sniffs/Custom/*
+!action.yaml
+!deploy.php
+!deployer.phar
+!Dockerfile
+!entrypoint.sh
+!phpcs.xml
+!problem-matcher.json
+!README.md
+!.gitignore

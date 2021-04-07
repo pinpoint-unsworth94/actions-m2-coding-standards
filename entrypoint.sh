@@ -14,6 +14,7 @@ else
 fi
 
 ARGUMENTS=$(echo ${INPUT_ARGUMENTS} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
+ARGUMENTS=$(echo ${ARGUMENTS} | sed 's/public\/app/app/g' | sed 's/  */ /g') #change paths from public/app... to app...
 if [[ $INPUT_FULL_SCAN == 'false' ]]
 then
   echo "Removing none org namespace (${INPUT_ORG_NAMESPACE}) changes..."
