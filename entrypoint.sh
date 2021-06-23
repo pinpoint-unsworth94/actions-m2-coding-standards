@@ -6,8 +6,6 @@ JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{pri
 
 echo "Found PHP version ${JENKINS_PHP} from jenkins file..."
 
-ls -l /phpfarm/inst/bin/
-
 if [ -z "$JENKINS_PHP" ]
 then
   PHP_BIN="/phpfarm/inst/bin/php-${INPUT_PHP_VERSION}"
