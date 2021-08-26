@@ -20,8 +20,8 @@ task('install', function () {
     if (!test('[ -f "composer.phar" ]')) {
         run("wget https://getcomposer.org/composer-1.phar");
         run("mv composer-1.phar composer.phar");
-        run($phpPath . " composer.phar require magento/magento-coding-standard:* --quiet --ignore-platform-reqs");
-        run($phpPath . " composer.phar require slevomat/coding-standard:* --quiet");
+        run($phpPath . " composer.phar require magento/magento-coding-standard --quiet");
+        run($phpPath . " composer.phar require slevomat/coding-standard --quiet");
     }
 
     run($phpPath . " ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../slevomat/coding-standard/");

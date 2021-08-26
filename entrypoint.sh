@@ -54,10 +54,10 @@ echo "Installing hirak/prestissimo..."
 $PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
 
 echo "Installing magento/magento-coding-standard..."
-$PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard:* --quiet --ignore-platform-reqs
+$PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard --quiet
 
 echo "Installing slevomat/coding-standard..."
-$PHP_BIN -d memory_limit=-1 composer.phar require slevomat/coding-standard:7.0.13 --quiet
+$PHP_BIN -d memory_limit=-1 composer.phar require slevomat/coding-standard --quiet
 
 echo "Setting up PHPCS standards..."
 $PHP_BIN ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../slevomat/coding-standard/
