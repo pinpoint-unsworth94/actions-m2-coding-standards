@@ -10,6 +10,11 @@ if [ -z "$JENKINS_PHP" ]
 then
   PHP_BIN="/phpfarm/inst/bin/php-${INPUT_PHP_VERSION}"
 else
+  if [[ "$JENKINS_PHP" == "7.4" ]]
+  then
+    JENKINS_PHP="7.3" ##tempory fix until time to understand why phpfarm not providing php7.4 as binary
+  fi
+
   PHP_BIN="/phpfarm/inst/bin/php-${JENKINS_PHP}"
 fi
 
