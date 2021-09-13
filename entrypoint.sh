@@ -12,6 +12,7 @@ then
 else
   if [[ "$JENKINS_PHP" == "7.4" ]]
   then
+    echo "Although PHP7.4 found...temporarily using PHP7.3..."
     JENKINS_PHP="7.3" ##tempory fix until time to understand why phpfarm not providing php7.4 as binary
   fi
 
