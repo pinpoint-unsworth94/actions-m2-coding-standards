@@ -66,7 +66,7 @@ echo "Installing slevomat/coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require slevomat/coding-standard --quiet
 
 echo "Setting up PHPCS standards..."
-$PHP_BIN ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../slevomat/coding-standard/
+$PHP_BIN ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../slevomat/coding-standard/,../../phpcompatibility/php-compatibility/
 
 echo "Moving in custom phpcs rulesets..."
 cp /phpcs.xml .

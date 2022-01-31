@@ -24,7 +24,7 @@ task('install', function () {
         run($phpPath . " composer.phar require slevomat/coding-standard --quiet");
     }
 
-    run($phpPath . " ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../slevomat/coding-standard/");
+    run($phpPath . " ./vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../slevomat/coding-standard/,../../phpcompatibility/php-compatibility");
 
     if (!test('[ -f "./vendor/squizlabs/php_codesniffer/src/Standards/Squiz/Sniffs/Operators/ComparisonOperatorUsageSniff.php" ]')) {
         run("cp -R ../Sniffs/Custom ./vendor/magento/magento-coding-standard/Magento2/Sniffs/");
