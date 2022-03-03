@@ -146,6 +146,9 @@ NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND/\$\{env\.WORKSPACE\}\//}"
 echo "Moving to gulp folder and installing node_modules..."
 eval "$NPM_INSTALL_COMMAND && npm update && npm rebuild node-sass"
 
+echo "Installing Gulp"
+npm install gulp-cli
+
 echo "Running gulp styles..."
 GULP_STYLES_OUTPUT=$(gulp styles --production)
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
