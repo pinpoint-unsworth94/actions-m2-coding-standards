@@ -147,7 +147,7 @@ echo "Moving to gulp folder and installing node_modules..."
 eval "$NPM_INSTALL_COMMAND && npm update && npm rebuild node-sass"
 
 echo "Installing Gulp"
-npm install gulp-cli
+npm install gulp
 
 echo "Running gulp styles..."
 GULP_STYLES_OUTPUT=$(gulp styles --production)
