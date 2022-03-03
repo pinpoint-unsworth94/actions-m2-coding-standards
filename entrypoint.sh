@@ -137,12 +137,12 @@ echo "NPM Verion:"
 npm --version
 
 #Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
-NPM_INSTALL_COMMAND=$(cat cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
+NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
 # GULP_STYLES_COMMAND=$(cat cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm gulp styles" | head -1)
 
 NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND/\$\{env\.WORKSPACE\}\//}"
 # GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
-
+$PHP_BIN -d memory_limit=-1 composer.phar install
 echo "Moving to gulp folder and installing node_modules..."
 eval "$NPM_INSTALL_COMMAND && npm update && npm rebuild node-sass"
 
