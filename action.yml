@@ -38,6 +38,8 @@ outputs:
         description: flag of any warnings from phpcs
     files_checked:
         description: files phpcbf and phpcs have been ran against
+    gulpstyles_output:
+        description: Output of gulp styles command
 runs:
     using: 'docker'
     image: 'Dockerfile'
