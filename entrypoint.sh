@@ -122,36 +122,36 @@ echo "Reverting the killing of composer as not needed..."
 mv composer.json.bk composer.json
 mv composer.lock.bk composer.lock
 
-
-echo "Installing node & npm..."
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-export NVM_DIR="$HOME/.nvm"
- [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-nvm install 8.1.3
-nvm use 8.1.3
-
-echo "Node Version:"
-node --version
-echo "NPM Verion:"
-npm --version
-
-#Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
-NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
-# GULP_STYLES_COMMAND=$(cat cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm gulp styles" | head -1)
-
-NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND/\$\{env\.WORKSPACE\}\//}"
-# GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
-$PHP_BIN -d memory_limit=-1 composer.phar install
-echo "Moving to gulp folder and installing node_modules..."
-eval "$NPM_INSTALL_COMMAND && npm update && npm rebuild node-sass"
-
-echo "Installing Gulp"
-npm install gulp
-
-echo "Running gulp styles..."
-GULP_STYLES_OUTPUT=$(gulp styles --production)
-GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
-GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
-GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
-echo "::set-output name=gulpstyles_output::$GULP_STYLES_OUTPUT"
+#
+# echo "Installing node & npm..."
+# curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+# export NVM_DIR="$HOME/.nvm"
+#  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#
+# nvm install 8.1.3
+# nvm use 8.1.3
+#
+# echo "Node Version:"
+# node --version
+# echo "NPM Verion:"
+# npm --version
+#
+# #Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
+# NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
+# # GULP_STYLES_COMMAND=$(cat cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm gulp styles" | head -1)
+#
+# NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND/\$\{env\.WORKSPACE\}\//}"
+# # GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
+# $PHP_BIN -d memory_limit=-1 composer.phar install
+# echo "Moving to gulp folder and installing node_modules..."
+# eval "$NPM_INSTALL_COMMAND && npm update && npm rebuild node-sass"
+#
+# echo "Installing Gulp"
+# npm install gulp
+#
+# echo "Running gulp styles..."
+# GULP_STYLES_OUTPUT=$(gulp styles --production)
+# GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
+# GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
+# GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
+# echo "::set-output name=gulpstyles_output::$GULP_STYLES_OUTPUT"
