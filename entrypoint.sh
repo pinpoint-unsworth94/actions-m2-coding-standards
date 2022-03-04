@@ -136,7 +136,8 @@ echo "NPM Verion:"
 npm --version
 
 echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
-$PHP_BIN -d memory_limit=-1 composer.phar config --global disable-tls true
+$PHP_BIN -d memory_limit=-1 composer.phar config disable-tls true
+$PHP_BIN -d memory_limit=-1 composer.phar config secure-http false
 $PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
 $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 
