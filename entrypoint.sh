@@ -49,7 +49,7 @@ echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
-touch composer.json
+echo "{}" >> composer.json
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
 then
