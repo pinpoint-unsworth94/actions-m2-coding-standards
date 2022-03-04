@@ -43,7 +43,7 @@ echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
 cd $MAGENTO_ROOT_PATH
 
 echo "Installing composer..."
-$PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
+$PHP_BIN -r "copy('https://getcomposer.org/composer-2.phar', 'composer.phar');"
 
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
@@ -133,8 +133,11 @@ node --version
 echo "NPM Verion:"
 npm --version
 
-echo "Installing FE composer package..."
+echo "Installing FE composer package ${FE_SCSS_PACKAGE}..."
 $PHP_BIN -d memory_limit=-1 composer.phar require ${FE_SCSS_PACKAGE}
+
+ls -l vendor/
+ls -l vendor/pinpint/
 
 #Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
 # NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
