@@ -43,7 +43,7 @@ echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
 cd $MAGENTO_ROOT_PATH
 
 echo "Installing composer..."
-$PHP_BIN -r "copy('https://getcomposer.org/composer-2.phar', 'composer.phar');"
+$PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
 
 echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
@@ -58,8 +58,8 @@ then
   $PHP_BIN -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-# echo "Installing hirak/prestissimo..."
-# $PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+echo "Installing hirak/prestissimo..."
+$PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
 
 echo "Installing magento/magento-coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard --quiet
