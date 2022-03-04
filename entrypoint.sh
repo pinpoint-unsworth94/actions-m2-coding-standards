@@ -49,7 +49,7 @@ echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
-echo '{"require": {}}' >> composer.json
+echo '{"require":{},"config":{"secure-http":false,"disable-tls":true}}' >> composer.json
 cat composer.json
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
@@ -138,7 +138,9 @@ npm --version
 echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
 $PHP_BIN -d memory_limit=-1 composer.phar config disable-tls true
 $PHP_BIN -d memory_limit=-1 composer.phar config secure-http false
+cat composer.json
 $PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
+cat composer.json
 $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 
 ls -l vendor/
