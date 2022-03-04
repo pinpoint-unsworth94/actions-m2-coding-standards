@@ -50,6 +50,7 @@ mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
 echo '{"require": {}}' >> composer.json
+cat composer.json
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
 then
