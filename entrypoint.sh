@@ -49,6 +49,7 @@ echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
+touch composer.json
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
 then
@@ -134,7 +135,8 @@ echo "NPM Verion:"
 npm --version
 
 echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
-$PHP_BIN -d memory_limit=-1 composer.phar config repositories.pinpoint composer https://packages.pinpointdesigns.co.uk/
+$PHP_BIN -d memory_limit=-1 composer.phar config --global disable-tls true
+$PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
 $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 
 ls -l vendor/

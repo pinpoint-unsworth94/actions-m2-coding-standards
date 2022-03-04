@@ -28,6 +28,9 @@ inputs:
     fe_scss_package:
         description: 'composer package for FE linting'
         required: false
+    fe_scss_package_repo:
+        description: 'composer repo for FE linting'
+        required: false
 outputs:
     phpcbf_output:
         description: Table of changes
