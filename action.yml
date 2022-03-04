@@ -25,6 +25,9 @@ inputs:
     magento_composer_password:
         description: 'composer password for magento'
         required: true
+    fe_scss_package:
+        description: 'composer package for FE linting'
+        required: false
 outputs:
     phpcbf_output:
         description: Table of changes
