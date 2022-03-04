@@ -45,6 +45,10 @@ cd $MAGENTO_ROOT_PATH
 echo "Installing composer..."
 $PHP_BIN -r "copy('https://getcomposer.org/composer-2.phar', 'composer.phar');"
 
+echo "Temporarily killing composer as not needed..."
+mv composer.json composer.json.bk
+mv composer.lock composer.lock.bk
+
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
 then
@@ -52,12 +56,8 @@ then
   $PHP_BIN -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-echo "Temporarily killing composer as not needed..."
-mv composer.json composer.json.bk
-mv composer.lock composer.lock.bk
-
-echo "Installing hirak/prestissimo..."
-$PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+# echo "Installing hirak/prestissimo..."
+# $PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
 
 echo "Installing magento/magento-coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard --quiet
@@ -133,8 +133,9 @@ node --version
 echo "NPM Verion:"
 npm --version
 
-echo "Installing FE composer package ${FE_SCSS_PACKAGE}..."
-$PHP_BIN -d memory_limit=-1 composer.phar require ${FE_SCSS_PACKAGE}
+echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
+$PHP_BIN -d memory_limit=-1 composer.phar config repositories.pinpoint composer https://packages.pinpointdesigns.co.uk/
+$PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 
 ls -l vendor/
 ls -l vendor/pinpint/
