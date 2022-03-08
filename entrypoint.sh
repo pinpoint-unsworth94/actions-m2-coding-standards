@@ -155,6 +155,7 @@ cd vendor/pinpoint/soulv2 && npm install  && npm update && npm rebuild node-sass
 
 echo "Installing Gulp"
 npm install --global gulp-cli
+npm install --global gulp
 
 
 echo "Running gulp styles..."
