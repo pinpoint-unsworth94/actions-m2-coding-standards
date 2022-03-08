@@ -11,10 +11,7 @@ ADD problem-matcher.json /problem-matcher.json
 ADD phpcs.xml /phpcs.xml
 ADD Sniffs /Sniffs
 
-RUN apt-get update && apt-get install -y libssl-dev
-RUN apt-get install -y libcurl4-gnutls-dev
-RUN apt-get install -y libcurl4-openssl-dev
-RUN apt-get install -y libcurl4
+RUN apt-get update && apt-get install -y wget
 
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

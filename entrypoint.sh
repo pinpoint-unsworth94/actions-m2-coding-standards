@@ -1,6 +1,10 @@
 #!/bin/bash
 # set -e
 
+sed -i '/^mozilla\/DST_Root_CA_X3/s/^/!/' /etc/ca-certificates.conf && update-ca-certificates -f
+
+PHP_BIN="/phpfarm/inst/bin/php-7.3"
+
 JENKINS_FILE=$(ls -1 _build/jenkins/ | head -1)
 JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{print $2}' | grep '[0-9]' | head -1)
 
@@ -43,14 +47,15 @@ echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
 cd $MAGENTO_ROOT_PATH
 
 echo "Installing composer..."
-$PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
+# $PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
+wget https://getcomposer.org/download/latest-2.x/composer.phar
 
 echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
 mv composer.lock composer.lock.bk
 
 echo '{"require":{},"config":{"secure-http":false,"disable-tls":true}}' >> composer.json
-cat composer.json
+
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
 then
