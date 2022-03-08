@@ -141,15 +141,8 @@ echo "NPM Verion:"
 npm --version
 
 echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
-$PHP_BIN -d memory_limit=-1 composer.phar config disable-tls true
-$PHP_BIN -d memory_limit=-1 composer.phar config secure-http false
-cat composer.json
 $PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
-cat composer.json
 $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
-
-ls -l vendor/
-ls -l vendor/pinpint/
 
 #Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
 # NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
@@ -161,7 +154,8 @@ echo "Moving to gulp folder and installing node_modules..."
 cd vendor/pinpoint/soulv2 && npm install  && npm update && npm rebuild node-sass
 
 echo "Installing Gulp"
-npm install gulp
+npm install --global gulp-cli
+
 
 echo "Running gulp styles..."
 GULP_STYLES_OUTPUT=$(gulp styles --production)
