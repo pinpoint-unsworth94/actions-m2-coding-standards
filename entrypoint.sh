@@ -132,8 +132,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-nvm install 8.1.3
-nvm use 8.1.3
+nvm install stable
+nvm use stable
 
 echo "Node Version:"
 node --version
@@ -154,7 +154,6 @@ echo "Moving to gulp folder and installing node_modules..."
 cd vendor/pinpoint/soulv2 && npm install  && npm update && npm rebuild node-sass
 
 echo "Installing Gulp"
-npm install --global gulp-cli
 npm install --global gulp
 
 
