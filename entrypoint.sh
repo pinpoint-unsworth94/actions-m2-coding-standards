@@ -125,7 +125,9 @@ cp /problem-matcher.json .
 echo "::add-matcher::$(pwd)/problem-matcher.json"
 $PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=phpcs.xml ${ARGUMENTS}
 
-
+echo "Reverting the killing of composer as not needed..."
+mv composer.json.bk composer.json
+mv composer.lock.bk composer.lock
 
 echo "Installing node & npm..."
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
@@ -171,7 +173,3 @@ GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=gulpstyles_output::$GULP_STYLES_OUTPUT"
 cd ../
 rm -fr ./fe_linting/
-
-echo "Reverting the killing of composer as not needed..."
-mv composer.json.bk composer.json
-mv composer.lock.bk composer.lock
