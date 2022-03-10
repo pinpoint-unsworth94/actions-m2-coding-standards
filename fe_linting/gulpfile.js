@@ -5,7 +5,6 @@ const eslint = require('gulp-eslint');
 
 // Sass Lint
 function sasslint() {
-  console.log(arg.path); return;
     return src('../app/design/frontend/**/**/**/*.s+(a|c)ss', '!node_modules/**')
         .pipe(sassLint())
         .pipe(sassLint.format())

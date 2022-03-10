@@ -152,7 +152,7 @@ $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 # GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
 echo "Moving to gulp folder and installing node_modules..."
 mv /fe_linting/ ./fe_linting/
-cd fe_linting && npm install && npm audit fix
+cd fe_linting && npm install && npm audit fix --force
 
 echo "Installing Gulp"
 npm install --global gulp
