@@ -132,17 +132,17 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 export NVM_DIR="$HOME/.nvm"
  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-nvm install stable
-nvm use stable
+nvm install lts/carbon
+nvm use lts/carbon
 
 echo "Node Version:"
 node --version
 echo "NPM Verion:"
 npm --version
 
-echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
-$PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
-$PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
+# echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
+# $PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
+# $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 
 #Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
 # NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
@@ -152,14 +152,19 @@ $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 # GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
 echo "Moving to gulp folder and installing node_modules..."
 mv /fe_linting/ ./fe_linting/
-cd fe_linting && npm install && npm audit fix --force
+cd fe_linting && npm install && npm audit fix
 
 echo "Installing Gulp"
 npm install --global gulp
 
+FE_SCSS_ARGUMENTS=$(echo ${INPUT_FE_SCSS_CHANGED_FILES} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
+FE_SCSS_ARGUMENTS=$(echo ${FE_SCSS_ARGUMENTS} | sed 's/public\/app/app/g' | sed 's/  */ /g') #change paths from public/app... to app...
 
-echo "Running gulp styles..."
-GULP_STYLES_OUTPUT=$(gulp lint)
+FE_JS_ARGUMENTS=$(echo ${INPUT_FE_JS_CHANGED_FILES} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
+FE_JS_ARGUMENTS=$(echo ${FE_JS_ARGUMENTS} | sed 's/public\/app/app/g' | sed 's/  */ /g') #change paths from public/app... to app...
+
+echo "Running gulp lint on «${FE_SCSS_ARGUMENTS} ${FE_JS_ARGUMENTS}» ..."
+GULP_STYLES_OUTPUT=$(gulp lint --scss "$FE_SCSS_ARGUMENTS" --js "$FE_JS_ARGUMENTS")
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
