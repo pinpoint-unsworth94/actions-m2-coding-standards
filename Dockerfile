@@ -10,8 +10,7 @@ COPY "entrypoint.sh" "/entrypoint.sh"
 ADD problem-matcher.json /problem-matcher.json
 ADD phpcs.xml /phpcs.xml
 ADD Sniffs /Sniffs
-
-RUN apt-get update && apt-get install -y wget
+ADD fe_linting /fe_linting
 
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

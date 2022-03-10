@@ -47,8 +47,8 @@ echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
 cd $MAGENTO_ROOT_PATH
 
 echo "Installing composer..."
-# $PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
-wget https://getcomposer.org/download/latest-2.x/composer.phar
+$PHP_BIN -r "copy('https://getcomposer.org/composer-2.phar', 'composer.phar');"
+# wget https://getcomposer.org/download/latest-2.x/composer.phar
 
 echo "Temporarily killing composer as not needed..."
 mv composer.json composer.json.bk
@@ -151,18 +151,20 @@ $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
 # NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND/\$\{env\.WORKSPACE\}\//}"
 # GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
 echo "Moving to gulp folder and installing node_modules..."
-cd vendor/pinpoint/soulv2 && npm install  && npm update && npm rebuild node-sass
+mv /fe_linting/ ./fe_linting/
+cd fe_linting && npm install && npm audit fix
 
 echo "Installing Gulp"
 npm install --global gulp
 
 
 echo "Running gulp styles..."
-GULP_STYLES_OUTPUT=$(gulp styles --production)
+GULP_STYLES_OUTPUT=$(gulp lint)
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=gulpstyles_output::$GULP_STYLES_OUTPUT"
+rm -fr ./fe_linting/
 
 echo "Reverting the killing of composer as not needed..."
 mv composer.json.bk composer.json
