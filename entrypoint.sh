@@ -63,8 +63,8 @@ then
   $PHP_BIN -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-echo "Installing hirak/prestissimo..."
-$PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+# echo "Installing hirak/prestissimo..."
+# $PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
 
 echo "Installing magento/magento-coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard --quiet

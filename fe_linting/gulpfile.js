@@ -45,7 +45,7 @@ function jsLint() {
 }
 
 function filterOnlyThemeChanges(files) {
-  if (files === 'false') return ['false'];
+  if (files === 'false' || typeof files !== 'undefined') return ['false'];
 
   files = files.split(' ');
   files = files.filter(file => file.includes('app/design')).map(file => '../' + file);
