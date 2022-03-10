@@ -48,13 +48,18 @@ function jsLint() {
 
 function filterOnlyThemeChanges(files) {
   if (files === 'false' || typeof files === 'undefined') return ['false'];
-
+  console.log('11111')
   files = files.split(' ');
-  files = files.filter(file => file.includes('app/design')).map(file => '../' + file);
+  files = files
+    .filter(file => file.includes('app/design'))
+    .map(file => '../' + file);
 
   if (!files.length) {
     return ['false'];
   }
+
+
+  return files
 }
 
 exports.lint = series(
