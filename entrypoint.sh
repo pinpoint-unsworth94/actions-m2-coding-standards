@@ -164,7 +164,7 @@ FE_JS_ARGUMENTS=$(echo ${INPUT_FE_JS_CHANGED_FILES} | sed 's/m2\/app/app/g' | se
 FE_JS_ARGUMENTS=$(echo ${FE_JS_ARGUMENTS} | sed 's/public\/app/app/g' | sed 's/  */ /g') #change paths from public/app... to app...
 
 echo "Running gulp lint on «${FE_SCSS_ARGUMENTS} ${FE_JS_ARGUMENTS}» ..."
-GULP_STYLES_OUTPUT=$(gulp lint --scss "$FE_SCSS_ARGUMENTS" --js "$FE_JS_ARGUMENTS")
+GULP_STYLES_OUTPUT=$(gulp lint --sass "$FE_SCSS_ARGUMENTS" --js "$FE_JS_ARGUMENTS")
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
