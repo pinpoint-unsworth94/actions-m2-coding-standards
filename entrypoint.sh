@@ -164,6 +164,7 @@ GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
 GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
 echo "::set-output name=gulpstyles_output::$GULP_STYLES_OUTPUT"
+cd ../
 rm -fr ./fe_linting/
 
 echo "Reverting the killing of composer as not needed..."
