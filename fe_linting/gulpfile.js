@@ -48,7 +48,7 @@ function filterOnlyThemeChanges(files) {
   if (files === 'false') return ['false'];
 
   files = files.split(' ');
-  files = files.filter(file => file.includes('app/design'));
+  files = files.filter(file => file.includes('app/design')).map(file => '../' + file);
 
   if (!files.length) {
     return ['false'];
