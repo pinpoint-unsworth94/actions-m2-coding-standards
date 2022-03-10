@@ -24,7 +24,8 @@ const arg = (argList => {
 // Sass Lint
 function sasslint() {
     let files = filterOnlyThemeChanges(arg.sass);
-
+    console.log('Running SASS linting on:')
+    console.log(files);
     return src(files, {"allowEmpty": true})
         .pipe(sassLint())
         .pipe(sassLint.format())
@@ -34,7 +35,8 @@ function sasslint() {
 // JS Lint
 function jsLint() {
     let files = filterOnlyThemeChanges(arg.js);
-
+    console.log('Running JS linting on:')
+    console.log(files);
     return src(files, {"allowEmpty": true})
         .pipe(eslint({
             configFile: '.eslintrc',
