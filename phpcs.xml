@@ -14,6 +14,10 @@
 
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
     <rule ref="SlevomatCodingStandard.Functions.UnusedParameter" />
-    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses" />
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+      <properties>
+        <property name="searchAnnotations" value="true"/>
+      </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Variables.UnusedVariable" />
 </ruleset>
