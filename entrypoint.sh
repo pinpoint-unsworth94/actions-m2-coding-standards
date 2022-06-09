@@ -1,6 +1,10 @@
 #!/bin/bash
 # set -e
 
+sed -i '/^mozilla\/DST_Root_CA_X3/s/^/!/' /etc/ca-certificates.conf && update-ca-certificates -f
+
+PHP_BIN="/phpfarm/inst/bin/php-7.3"
+
 JENKINS_FILE=$(ls -1 _build/jenkins/ | head -1)
 JENKINS_PHP=$(cat "_build/jenkins/${JENKINS_FILE}" | awk -v FS="(php|-sp)" '{print $2}' | grep '[0-9]' | head -1)
 
@@ -43,7 +47,14 @@ echo "Changing dir to magento root path ${MAGENTO_ROOT_PATH}"
 cd $MAGENTO_ROOT_PATH
 
 echo "Installing composer..."
-$PHP_BIN -r "copy('https://getcomposer.org/composer-1.phar', 'composer.phar');"
+$PHP_BIN -r "copy('https://getcomposer.org/composer-2.phar', 'composer.phar');"
+# wget https://getcomposer.org/download/latest-2.x/composer.phar
+
+echo "Temporarily killing composer as not needed..."
+mv composer.json composer.json.bk
+mv composer.lock composer.lock.bk
+
+echo '{"require":{},"config":{"secure-http":false,"disable-tls":true}}' >> composer.json
 
 HAS_MAGENTO_COMPOSER_KEYS=$(cat ./auth.json | grep "repo.magento.com")
 if [[ -z $HAS_MAGENTO_COMPOSER_KEYS ]]
@@ -52,12 +63,8 @@ then
   $PHP_BIN -d memory_limit=-1 composer.phar config http-basic.repo.magento.com $INPUT_MAGENTO_COMPOSER_USERNAME $INPUT_MAGENTO_COMPOSER_PASSWORD
 fi
 
-echo "Temporarily killing composer as not needed..."
-mv composer.json composer.json.bk
-mv composer.lock composer.lock.bk
-
-echo "Installing hirak/prestissimo..."
-$PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
+# echo "Installing hirak/prestissimo..."
+# $PHP_BIN -d memory_limit=-1 composer.phar global require hirak/prestissimo --quiet
 
 echo "Installing magento/magento-coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard --quiet
@@ -121,3 +128,48 @@ $PHP_BIN -d memory_limit=-1 ./vendor/bin/phpcs --report=checkstyle --standard=ph
 echo "Reverting the killing of composer as not needed..."
 mv composer.json.bk composer.json
 mv composer.lock.bk composer.lock
+
+echo "Installing node & npm..."
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+ [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+nvm install lts/carbon
+nvm use lts/carbon
+
+echo "Node Version:"
+node --version
+echo "NPM Verion:"
+npm --version
+
+# echo "Installing FE composer package ${INPUT_FE_SCSS_PACKAGE}..."
+# $PHP_BIN -d memory_limit=-1 composer.phar config repositories.fe_repo composer ${INPUT_FE_SCSS_PACKAGE_REPO}
+# $PHP_BIN -d memory_limit=-1 composer.phar require ${INPUT_FE_SCSS_PACKAGE}
+
+#Run Gulp Linting - TODO: TO BE MOVED TO OWN ACTION
+# NPM_INSTALL_COMMAND=$(cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm install" | head -1)
+# GULP_STYLES_COMMAND=$(cat cat "_build/jenkins/${JENKINS_FILE}" | grep -oh "cd.*\/vendor\/.*npm gulp styles" | head -1)
+
+# NPM_INSTALL_COMMAND="${NPM_INSTALL_COMMAND/\$\{env\.WORKSPACE\}\//}"
+# GULP_STYLES_COMMAND="${GULP_STYLES_COMMAND/\$\{env\.WORKSPACE\}\//}"
+echo "Moving to gulp folder and installing node_modules..."
+mv /fe_linting/ ./fe_linting/
+cd fe_linting && npm install && npm audit fix
+
+echo "Installing Gulp"
+npm install --global gulp
+
+FE_SCSS_ARGUMENTS=$(echo ${INPUT_FE_SCSS_CHANGED_FILES} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
+FE_SCSS_ARGUMENTS=$(echo ${FE_SCSS_ARGUMENTS} | sed 's/public\/app/app/g' | sed 's/  */ /g') #change paths from public/app... to app...
+
+FE_JS_ARGUMENTS=$(echo ${INPUT_FE_JS_CHANGED_FILES} | sed 's/m2\/app/app/g' | sed 's/  */ /g') #change paths from m2/app... to app...
+FE_JS_ARGUMENTS=$(echo ${FE_JS_ARGUMENTS} | sed 's/public\/app/app/g' | sed 's/  */ /g') #change paths from public/app... to app...
+
+echo "Running gulp lint on «${FE_SCSS_ARGUMENTS} ${FE_JS_ARGUMENTS}» ..."
+GULP_STYLES_OUTPUT=$(gulp lint --sass "$FE_SCSS_ARGUMENTS" --js "$FE_JS_ARGUMENTS")
+GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//'%'/'%25'}"
+GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\n'/'%0A'}"
+GULP_STYLES_OUTPUT="${GULP_STYLES_OUTPUT//$'\r'/'%0D'}"
+echo "::set-output name=gulpstyles_output::$GULP_STYLES_OUTPUT"
+cd ../
+rm -fr ./fe_linting/
