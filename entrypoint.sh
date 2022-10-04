@@ -70,6 +70,7 @@ echo "Installing magento/magento-coding-standard..."
 $PHP_BIN -d memory_limit=-1 composer.phar require magento/magento-coding-standard --quiet
 
 echo "Installing slevomat/coding-standard..."
+$PHP_BIN -d memory_limit=-1 composer.phar config --no-plugins allow-plugins.dealerdirect/phpcodesniffer-composer-installer
 $PHP_BIN -d memory_limit=-1 composer.phar require slevomat/coding-standard --quiet
 
 echo "Setting up PHPCS standards..."
